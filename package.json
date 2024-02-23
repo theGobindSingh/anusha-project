@@ -8,17 +8,20 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
-    "prettier": "^3.1.1",
-    "turbo": "latest"
+    "@typescript-eslint/eslint-plugin": "^7.0.2",
+    "@typescript-eslint/parser": "^7.0.2",
+    "backend": "*",
+    "frontend": "*",
+    "prettier": "^3.2.5",
+    "turbo": "latest",
+    "typescript": "^5.3"
   },
   "engines": {
     "node": ">=18"
   },
   "packageManager": "npm@9.8.1",
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "frontend",
+    "backend"
   ]
 }
