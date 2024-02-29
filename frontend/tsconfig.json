@@ -1,29 +1,23 @@
 {
-  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    "jsx": "preserve",
-    "noEmit": true,
-    "declaration": true,
-    "declarationMap": true,
-    "esModuleInterop": true,
-    "incremental": false,
-    "isolatedModules": true,
-    "lib": ["es2022", "DOM", "DOM.Iterable"],
-    "module": "NodeNext",
-    "moduleDetection": "force",
-    "moduleResolution": "NodeNext",
-    "noUncheckedIndexedAccess": true,
-    "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "ES2022"
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "jsxImportSource": "@emotion/react",
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
-  "include": ["next-env.d.ts", "next.config.js", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }

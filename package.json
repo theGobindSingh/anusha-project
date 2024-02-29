@@ -23,5 +23,8 @@
   "workspaces": [
     "frontend",
     "backend"
-  ]
+  ],
+  "dependencies": {
+    "primereact": "^10.5.1"
+  }
 }

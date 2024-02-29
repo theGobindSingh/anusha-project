@@ -12,10 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "name": {
-      "type": "string",
-      "required": true
-    },
     "pictures": {
       "type": "media",
       "multiple": true,
@@ -38,9 +34,26 @@
       "target": "api::species.species",
       "inversedBy": "pets"
     },
-    "isForAdoption": {
-      "type": "boolean",
-      "default": true,
+    "petage": {
+      "type": "integer",
+      "required": true
+    },
+    "email": {
+      "type": "string",
+      "required": true
+    },
+    "location": {
+      "type": "string"
+    },
+    "breed": {
+      "type": "string"
+    },
+    "gender": {
+      "type": "enumeration",
+      "enum": [
+        "male",
+        "female"
+      ],
       "required": true
     }
   }

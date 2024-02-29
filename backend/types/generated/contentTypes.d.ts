@@ -795,7 +795,6 @@ export interface ApiPetPet extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    name: Attribute.String & Attribute.Required;
     pictures: Attribute.Media & Attribute.Required;
     parent: Attribute.String & Attribute.Required;
     parentContact: Attribute.BigInteger & Attribute.Required;
@@ -804,9 +803,11 @@ export interface ApiPetPet extends Schema.CollectionType {
       'manyToOne',
       'api::species.species'
     >;
-    isForAdoption: Attribute.Boolean &
-      Attribute.Required &
-      Attribute.DefaultTo<true>;
+    petage: Attribute.Integer & Attribute.Required;
+    email: Attribute.String & Attribute.Required;
+    location: Attribute.String;
+    breed: Attribute.String;
+    gender: Attribute.Enumeration<['male', 'female']> & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
