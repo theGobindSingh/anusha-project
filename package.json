@@ -14,7 +14,9 @@
     "frontend": "*",
     "prettier": "^3.2.5",
     "turbo": "latest",
-    "typescript": "^5.3"
+    "typescript": "^5.3",
+    "eslint": "^8",
+    "@types/node": "^20"
   },
   "engines": {
     "node": ">=18"
@@ -23,8 +25,5 @@
   "workspaces": [
     "frontend",
     "backend"
-  ],
-  "dependencies": {
-    "primereact": "^10.5.1"
-  }
+  ]
 }

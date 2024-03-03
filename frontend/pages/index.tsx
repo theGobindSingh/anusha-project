@@ -1,10 +1,6 @@
-import Image from "next/image";
-import { Inter } from "next/font/google";
 import Link from "next/link";
-import { Button } from "primereact/button";
 import { homeWrapper, linkDiv } from "@/styles/home";
-
-const inter = Inter({ subsets: ["latin"] });
+import { Button } from "@mui/material";
 
 export default function Home() {
   return (

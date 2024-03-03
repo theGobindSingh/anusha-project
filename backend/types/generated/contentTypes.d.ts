@@ -795,7 +795,7 @@ export interface ApiPetPet extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    pictures: Attribute.Media & Attribute.Required;
+    picture: Attribute.Media & Attribute.Required;
     parent: Attribute.String & Attribute.Required;
     parentContact: Attribute.BigInteger & Attribute.Required;
     species: Attribute.Relation<

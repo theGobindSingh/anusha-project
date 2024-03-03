@@ -1,6 +1,5 @@
-import { Card } from "primereact/card";
-import { Button } from "primereact/button";
 import { adoptionCard, adoptionGrid, adoptionWrapper } from "@/styles/adoption";
+import { Button, Card } from "@mui/material";
 export default function Adoption() {
   const header = <img alt="Card" src="https://primefaces.org/cdn/primereact/images/usercard.png" />;
   const footer = <Button label="Adopt" />;

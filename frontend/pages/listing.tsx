@@ -1,152 +1,171 @@
 import { listingForm, listingWrapper, radioContainer } from "@/styles/listing";
-import { Button } from "primereact/button";
-import { FileUpload } from "primereact/fileupload";
-import { InputNumber } from "primereact/inputnumber";
-import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
-import { RadioButton, RadioButtonClickEvent } from "primereact/radiobutton";
-import { useEffect, useRef, useState } from "react";
+import { FormEventHandler, useEffect, useRef, useState } from "react";
 import { useMutation } from "@apollo/client";
-import { mutationSetNewPet } from "@/gql/queries";
+import { mutationSetNewPet, mutationUploadFile } from "@/gql/mutations";
+import {
+  DataMutationUploadNewFile,
+  VariablesMutationSetNewPet,
+  VariablesMutationUploadNewFile,
+  petEnum
+} from "@/gql/mutation-types";
+import { FilePond, registerPlugin } from "react-filepond";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import { nanoid } from "nanoid/non-secure";
+import axios from "axios";
+registerPlugin(FilePondPluginImagePreview);
 
-const RadioWrapper = ({ values, name }: { values: string[]; name: string }) => {
+const RadioWrapper = ({ values, name, heading }: { values: string[]; name: string; heading: string }) => {
   const mapper = (value: string, index: number) => {
     return (
-      <div className="flex align-items-center" key={name + value + index}>
-        <input id={name + value + index} name={name} value={value} defaultChecked={index === 0} type="radio" />
-        <label htmlFor={name + value + index} className="ml-2">
-          {value}
-        </label>
+      <div key={value + index + name} className="input-container">
+        <label htmlFor={value + index + name}>{value}</label>
+        <input required type="radio" value={value} id={value + index + name} name={name} defaultChecked={index === 0} />
       </div>
     );
   };
-  return <div css={radioContainer}>{values.map(mapper)}</div>;
+  return (
+    <div css={radioContainer}>
+      <span>{heading}</span>
+      {values.map(mapper)}
+    </div>
+  );
 };
 
 export default function Listing() {
-  const [createPet, { data, loading, error }] = useMutation(mutationSetNewPet);
-  const formRef = useRef<HTMLFormElement>(null);
-  const [petDetails, setPetDetails] = useState({
-    age: 0,
-    breed: "",
-    picture: null,
-    ownerName: "",
-    ownerNumber: 0,
-    ownerEmail: "",
-    ownerLocation: ""
-  });
-  const handleChangeold = (e: any) => {
-    const temp = e.target || e.originalEvent?.target;
-    switch (temp.name) {
-      case "name":
-        setPetDetails((prev) => ({ ...prev, ownerName: temp.value }));
-        break;
-      case "email":
-        setPetDetails((prev) => ({ ...prev, ownerEmail: temp.value }));
-        break;
-      case "location":
-        setPetDetails((prev) => ({ ...prev, ownerLocation: temp.value }));
-        break;
-      case "breed":
-        setPetDetails((prev) => ({ ...prev, breed: temp.value }));
-        break;
-      case "age":
-        setPetDetails((prev) => ({ ...prev, age: temp.value }));
-        break;
-      case "number":
-        setPetDetails((prev) => ({ ...prev, ownerNumber: temp.value }));
-        break;
-      default:
-        break;
-    }
-  };
-  const submitHandler = (e: any) => {
+  const imgRef = useRef<any>(null);
+  const filePondRef = useRef<FilePond>(null);
+  const [uploadImg] = useMutation<DataMutationUploadNewFile, VariablesMutationUploadNewFile>(mutationUploadFile);
+  const [createPet] = useMutation<unknown, VariablesMutationSetNewPet>(mutationSetNewPet);
+  const submitHandler: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    const inputs = Array.from(e.target) as HTMLInputElement[];
-    const output = {
-      inputs: inputs
-        .filter((target) => (target?.type === "radio" ? target.checked : target.value))
-        .map(({ value, id, name, type }) => ({
-          [`${name || id}`]: type === "number" ? Number(value.replace(/\,/gm, "")) : value
-        }))
-    };
-    createPet({
-      variables: {
-        parent: output.inputs[4].name,
-        parentContact: output.inputs[5].number,
-        species: output.inputs[0].species === "cat" ? 1 : 2,
-        petage: output.inputs[1].age,
-        email: output.inputs[6].email,
-        location: output.inputs[7].location,
-        breed: output.inputs[3].breed,
-        gender: output.inputs[2].gender,
-        publishedAt: new Date().toISOString()
-      }
-    });
+    const eTarget = e.target as HTMLFormElement;
+    const submitBtn = eTarget.querySelector("button[type=submit]");
+    submitBtn?.setAttribute("disabled", "true");
+    if (imgRef.current) {
+      const mainFun = async () => {
+        const uploadedImg = await uploadImg({
+          variables: {
+            file: imgRef.current
+          }
+        });
+        const { id: imgId } = uploadedImg?.data?.upload?.data ?? ({} as never);
+        if (imgId) {
+          const inputs = Array.from(eTarget) as HTMLInputElement[];
+          const output = {
+            inputs: inputs
+              .filter((target) => (target?.type === "radio" ? target.checked : target.value))
+              .map(({ value, id, name, type }) => ({
+                [`${name || id}`]: type === "number" ? Number(value.replace(/\,/gm, "")) : value
+              }))
+          };
+          createPet({
+            variables: {
+              parent: String(output.inputs[4].name),
+              parentContact: Number(output.inputs[5].number),
+              species: petEnum[output.inputs[0].species as keyof typeof petEnum],
+              petage: Number(output.inputs[1].age),
+              email: String(output.inputs[6].email),
+              location: String(output.inputs[7].location),
+              breed: String(output.inputs[3].breed),
+              gender: String(output.inputs[2].gender),
+              publishedAt: String(new Date().toISOString()),
+              pictureId: imgId
+            }
+          })
+            .then((res) => {
+              console.log(res);
+              alert("Success");
+              eTarget.reset();
+              imgRef.current = null;
+              filePondRef.current?.removeFiles();
+            })
+            .catch((err) => {
+              console.error(err);
+              alert("Something went wrong. Please try again later.");
+            });
+        } else {
+          alert("Image upload failed");
+        }
+      };
+      mainFun();
+    } else {
+      alert("Please upload an image");
+    }
+    submitBtn?.removeAttribute("disabled");
   };
   return (
-    <section className="page-wrapper" css={listingWrapper}>
+    <div className="page-wrapper" css={listingWrapper}>
       <span>List For Adoption</span>
-      <form action="submit" onSubmit={submitHandler} css={listingForm} ref={formRef}>
+      <form onSubmit={submitHandler} css={listingForm}>
         <h2>Pet Details</h2>
 
-        <div>
-          <RadioWrapper name="species" values={["cat", "dog"]} />
-        </div>
+        <RadioWrapper name="species" values={["cat", "dog"]} heading="Species" />
 
-        <div>
+        <div className="input-container">
+          <input required type="number" id="age" />
           <label htmlFor="age">Age:</label>
-          <InputText type="number" id="age" name="age" />
         </div>
 
-        <div>
-          <RadioWrapper name="gender" values={["male", "female"]} />
-        </div>
+        <RadioWrapper name="gender" values={["male", "female"]} heading="Gender" />
 
-        <div>
+        <div className="input-container">
+          <input required id="breed" name="breed" />
           <label htmlFor="breed">Breed:</label>
-          <InputText id="breed" name="breed" required />
         </div>
 
-        <div>
-          <label htmlFor="picture">Picture:</label>
-          <FileUpload
-            multiple
-            accept="image/*"
-            maxFileSize={1000000}
-            id="picture"
-            name="picture"
-            customUpload
-            uploadHandler={(e) => console.log(e)}
-          />
-        </div>
+        <FilePond
+          allowMultiple={false}
+          css={{ width: "90%", maxWidth: "500px" }}
+          ref={filePondRef}
+          acceptedFileTypes={["image/*"]}
+          maxFiles={1}
+          required
+          onaddfile={(err, { file, fileExtension }) => {
+            if (err) {
+              console.error(err);
+            } else {
+              const fun = async () => {
+                const blob = new Blob([await file.arrayBuffer()], { type: file.type });
+                const fileNew = new File([blob], `${nanoid()}.${fileExtension}`, { type: file.type });
+                imgRef.current = fileNew;
+              };
+              fun();
+            }
+          }}
+          onremovefile={(err) => {
+            if (err) {
+              console.error(err);
+            } else {
+              imgRef.current = null;
+            }
+          }}
+          labelIdle={`Drag & Drop your Pet's image or <span class="filepond--label-action"> Browse </span>`}
+        />
 
         <h2>Owner Details</h2>
 
-        <div>
+        <div className="input-container">
+          <input required id="name" name="name" />
           <label htmlFor="name">Name:</label>
-          <InputText id="name" name="name" required />
         </div>
 
-        <div>
+        <div className="input-container">
           <label htmlFor="number">Number:</label>
-          <InputText type="number" id="number" name="number" required />
+          <input required type="tel" id="number" name="number" />
         </div>
 
-        <div>
+        <div className="input-container">
           <label htmlFor="email">Email:</label>
-          <InputText id="email" name="email" required />
+          <input required id="email" name="email" type="mail" />
         </div>
 
-        <div>
+        <div className="input-container">
           <label htmlFor="location">Location:</label>
-          <InputText id="location" name="location" required />
+          <input required id="location" name="location" />
         </div>
 
-        <Button className="my-4" type="submit">
-          Submit
-        </Button>
+        <button type="submit">Submit</button>
       </form>
-    </section>
+    </div>
   );
 }

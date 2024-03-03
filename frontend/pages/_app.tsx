@@ -1,24 +1,33 @@
-import { PrimeReactProvider } from "primereact/api";
-import "primeflex/primeflex.css";
-import "primereact/resources/themes/lara-dark-purple/theme.css";
 import type { AppProps } from "next/app";
 import { Global } from "@emotion/react";
 import { globals } from "@/styles/globals";
-import Sidebar from "@/components/sidebar";
 import { ApolloClient, InMemoryCache, ApolloProvider, gql } from "@apollo/client";
+import createUploadLink from "apollo-upload-client/createUploadLink.mjs";
+import { ThemeProvider } from "@mui/material";
+import AppBar from "@/components/app-bar";
+import theme from "@/styles/theme";
+import Head from "next/head";
+import "@fontsource/inter";
+import "filepond/dist/filepond.min.css";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 
 export const client = new ApolloClient({
-  uri: "http://localhost:1337/graphql",
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
+  link: createUploadLink({
+    uri: "http://localhost:1337/graphql"
+  })
 });
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={client}>
-      <PrimeReactProvider>
+      <ThemeProvider theme={theme}>
+        <Head>
+          <meta name="viewport" content="initial-scale=1, width=device-width" />
+        </Head>
         <Global styles={globals} />
-        {/* <Sidebar /> */}
+        <AppBar />
         <Component {...pageProps} />
-      </PrimeReactProvider>
+      </ThemeProvider>
     </ApolloProvider>
   );
 }
