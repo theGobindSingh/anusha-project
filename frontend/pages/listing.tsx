@@ -11,7 +11,7 @@ import {
 import { FilePond, registerPlugin } from "react-filepond";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import { nanoid } from "nanoid/non-secure";
-import axios from "axios";
+
 registerPlugin(FilePondPluginImagePreview);
 
 const RadioWrapper = ({ values, name, heading }: { values: string[]; name: string; heading: string }) => {
@@ -39,7 +39,7 @@ export default function Listing() {
   const submitHandler: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     const eTarget = e.target as HTMLFormElement;
-    const submitBtn = eTarget.querySelector("button[type=submit]");
+    const submitBtn = eTarget.querySelector("*[type=submit]");
     submitBtn?.setAttribute("disabled", "true");
     if (imgRef.current) {
       const mainFun = async () => {

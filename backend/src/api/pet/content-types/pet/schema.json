@@ -34,7 +34,7 @@
       "target": "api::species.species",
       "inversedBy": "pets"
     },
-    "petage": {
+    "petAge": {
       "type": "integer",
       "required": true
     },

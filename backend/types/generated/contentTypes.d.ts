@@ -803,7 +803,7 @@ export interface ApiPetPet extends Schema.CollectionType {
       'manyToOne',
       'api::species.species'
     >;
-    petage: Attribute.Integer & Attribute.Required;
+    petAge: Attribute.Integer & Attribute.Required;
     email: Attribute.String & Attribute.Required;
     location: Attribute.String;
     breed: Attribute.String;
