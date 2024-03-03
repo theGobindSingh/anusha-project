@@ -10,6 +10,10 @@ import Head from "next/head";
 import "@fontsource/inter";
 import "filepond/dist/filepond.min.css";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import { registerPlugin } from "filepond";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+
+registerPlugin(FilePondPluginImagePreview);
 
 export const client = new ApolloClient({
   cache: new InMemoryCache(),

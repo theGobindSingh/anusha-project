@@ -11,10 +11,23 @@ export const listingWrapper = css`
   }
 `;
 
+export const radioBtnsContainer = css`
+  display: flex;
+  width: 100%;
+  gap: 15%;
+  label {
+    font-size: 1.25rem;
+    margin-left: 5px;
+    text-transform: capitalize;
+  }
+  padding-bottom: 10px;
+`;
+
 export const listingForm = css`
   ${middleFlex}
   flex-direction: column;
   width: 550px;
+  margin-bottom: 5vh;
   * {
     transition: all 0.3s ease;
   }
@@ -27,12 +40,15 @@ export const listingForm = css`
     flex-direction: column;
     & > input {
       display: flex;
-      margin-left: 1rem;
+      border: 2px solid #8bbbe9;
+      background: transparent;
+      padding: 10px;
+      border-radius: 5px;
       width: 100%;
+      font-size: 1.2rem;
     }
     & > span {
       display: flex;
-      margin-left: 1rem;
       width: 100%;
     }
     & > label {
@@ -41,23 +57,22 @@ export const listingForm = css`
       align-self: flex-start;
     }
   }
-  /* & > button {
-    width: 25%;
-    padding: 12px 0;
-    text-decoration: none;
-    margin: 2rem 0 3rem 0;
-    border-radius: 8px;
-    cursor: pointer;
-    &:hover {
-      background-color: white;
-      color: black;
-      border: 2px solid white;
-    }
-    border: 2px solid gray;
-    background-color: transparent;
-  } */
+  @media screen and (width < 600px) {
+    width: 90%;
+  }
 `;
 export const radioContainer = css`
   ${middleFlex}
   gap: 2rem;
+`;
+
+export const submitBtn = css`
+  padding: 10px 25px;
+  border-radius: 500px;
+  border: none;
+  background-color: #8bbbe9;
+  color: black;
+  cursor: pointer;
+  font-size: 1.2rem;
+  margin: 2vh 0;
 `;

@@ -1,4 +1,4 @@
-import { listingForm, listingWrapper, radioContainer } from "@/styles/listing";
+import { listingForm, listingWrapper, radioBtnsContainer, radioContainer, submitBtn } from "@/styles/listing";
 import { FormEventHandler, useEffect, useRef, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { mutationSetNewPet, mutationUploadFile } from "@/gql/mutations";
@@ -9,24 +9,21 @@ import {
   petEnum
 } from "@/gql/mutation-types";
 import { FilePond, registerPlugin } from "react-filepond";
-import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import { nanoid } from "nanoid/non-secure";
-
-registerPlugin(FilePondPluginImagePreview);
 
 const RadioWrapper = ({ values, name, heading }: { values: string[]; name: string; heading: string }) => {
   const mapper = (value: string, index: number) => {
     return (
       <div key={value + index + name} className="input-container">
-        <label htmlFor={value + index + name}>{value}</label>
         <input required type="radio" value={value} id={value + index + name} name={name} defaultChecked={index === 0} />
+        <label htmlFor={value + index + name}>{value}</label>
       </div>
     );
   };
   return (
     <div css={radioContainer}>
-      <span>{heading}</span>
-      {values.map(mapper)}
+      <span css={{ fontSize: "1.25rem" }}>{heading}</span>
+      <div css={radioBtnsContainer}>{values.map(mapper)}</div>
     </div>
   );
 };
@@ -97,25 +94,25 @@ export default function Listing() {
     <div className="page-wrapper" css={listingWrapper}>
       <span>List For Adoption</span>
       <form onSubmit={submitHandler} css={listingForm}>
-        <h2>Pet Details</h2>
+        <h2 css={{ marginTop: "5vh", width: "100%" }}>Pet Details</h2>
 
-        <RadioWrapper name="species" values={["cat", "dog"]} heading="Species" />
+        <RadioWrapper name="species" values={["cat", "dog"]} heading="Animal" />
 
         <div className="input-container">
-          <input required type="number" id="age" />
           <label htmlFor="age">Age:</label>
+          <input required type="number" id="age" />
         </div>
 
         <RadioWrapper name="gender" values={["male", "female"]} heading="Gender" />
 
         <div className="input-container">
-          <input required id="breed" name="breed" />
           <label htmlFor="breed">Breed:</label>
+          <input required id="breed" name="breed" />
         </div>
 
         <FilePond
           allowMultiple={false}
-          css={{ width: "90%", maxWidth: "500px" }}
+          css={{ width: "100%", maxWidth: "550px", marginTop: "10px", boxShadow: "0 0 2rem 0 rgba(0,0,0,0.25)" }}
           ref={filePondRef}
           acceptedFileTypes={["image/*"]}
           maxFiles={1}
@@ -142,11 +139,11 @@ export default function Listing() {
           labelIdle={`Drag & Drop your Pet's image or <span class="filepond--label-action"> Browse </span>`}
         />
 
-        <h2>Owner Details</h2>
+        <h2 css={{ width: "100%", marginTop: "5vh" }}>Owner Details</h2>
 
         <div className="input-container">
-          <input required id="name" name="name" />
           <label htmlFor="name">Name:</label>
+          <input required id="name" name="name" />
         </div>
 
         <div className="input-container">
@@ -164,7 +161,9 @@ export default function Listing() {
           <input required id="location" name="location" />
         </div>
 
-        <button type="submit">Submit</button>
+        <button type="submit" css={submitBtn}>
+          Submit
+        </button>
       </form>
     </div>
   );

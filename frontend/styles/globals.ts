@@ -4,12 +4,15 @@ export const globals = css`
     margin: 0;
     padding: 0;
     background-color: var(--surface-ground);
+    font-family: "Inter";
+    background: url("/images/paws-bg.jpg") no-repeat center;
+    background-size: cover;
   }
   * {
     box-sizing: border-box;
   }
   .page-wrapper {
-    padding-left: 3rem;
     width: 100%;
+    padding-top: 12.5vh;
   }
 `;
