@@ -13,6 +13,9 @@ export default function Home() {
         <Link href="/listing">
           <Button>Listing</Button>
         </Link>
+        <Link href="/takeaction">
+          <Button>Take Action(RESCUE)</Button>
+        </Link>
       </div>
     </section>
   );

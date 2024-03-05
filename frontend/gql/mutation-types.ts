@@ -8,7 +8,7 @@ export interface VariablesMutationSetNewPet {
   parentContact: number;
   species: petEnum;
   pictureId: string;
-  petage: number;
+  petAge: number;
   email: string;
   location: string;
   breed: string;
@@ -24,6 +24,9 @@ export interface DataMutationUploadNewFile {
   upload: {
     data: {
       id: string;
+      attributes: {
+        url: string;
+      };
     };
   };
 }

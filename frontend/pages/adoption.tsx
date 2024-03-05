@@ -61,7 +61,7 @@ function Adoption() {
   };
   return (
     <section className="page-wrapper" css={adoptionWrapper}>
-      <h1 className="adoption-header">Adoption</h1>
+      <h1 className="adoption-header">Adoption- Send mail here after adoption success- pawsandclawsmitra@gmail.com</h1>
       <div css={adoptionGrid}>{pets?.length ?? 0 > 0 ? pets.map(petMapper) : "Loading..."}</div>
     </section>
   );

@@ -55,12 +55,25 @@ export default function Listing() {
                 [`${name || id}`]: type === "number" ? Number(value.replace(/\,/gm, "")) : value
               }))
           };
+          console.log({
+            parent: String(output.inputs[4].name),
+            parentContact: Number(output.inputs[5].number),
+            species: petEnum[output.inputs[0].species as keyof typeof petEnum],
+            petage: Number(output.inputs[1].age),
+            email: String(output.inputs[6].email),
+            location: String(output.inputs[7].location),
+            breed: String(output.inputs[3].breed),
+            gender: String(output.inputs[2].gender),
+            publishedAt: String(new Date().toISOString()),
+            pictureId: imgId
+          });
+
           createPet({
             variables: {
               parent: String(output.inputs[4].name),
               parentContact: Number(output.inputs[5].number),
               species: petEnum[output.inputs[0].species as keyof typeof petEnum],
-              petage: Number(output.inputs[1].age),
+              petAge: Number(output.inputs[1].age),
               email: String(output.inputs[6].email),
               location: String(output.inputs[7].location),
               breed: String(output.inputs[3].breed),

@@ -6,7 +6,7 @@ export const mutationSetNewPet = gql`
     $parentContact: Long!
     $species: ID!
     $pictureId: ID!
-    $petage: Int!
+    $petAge: Int!
     $email: String!
     $location: String!
     $breed: String!
@@ -19,7 +19,7 @@ export const mutationSetNewPet = gql`
         parentContact: $parentContact
         picture: $pictureId
         species: $species
-        petage: $petage
+        petAge: $petAge
         email: $email
         location: $location
         breed: $breed
@@ -39,7 +39,7 @@ export const mutationSetNewPet = gql`
               }
             }
           }
-          petage
+          petAge
           email
           location
           breed
@@ -55,6 +55,9 @@ export const mutationUploadFile = gql`
     upload(file: $file) {
       data {
         id
+        attributes {
+          url
+        }
       }
     }
   }

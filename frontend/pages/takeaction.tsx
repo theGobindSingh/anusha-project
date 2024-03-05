@@ -1,7 +1,13 @@
 import { listingForm, submitBtn } from "@/styles/listing";
-import { ReactFragment, useState } from "react";
+import axios from "axios";
+import { FilePond } from "react-filepond";
+import { useRef, useState } from "react";
+import { nanoid } from "nanoid/non-secure";
+import { useMutation } from "@apollo/client";
+import { DataMutationUploadNewFile, VariablesMutationUploadNewFile } from "@/gql/mutation-types";
+import { mutationUploadFile } from "@/gql/mutations";
 
-export default function takeaction() {
+export default function TakeAction() {
   const [details, setDetails] = useState({
     name: "",
     addressani: "",
@@ -10,7 +16,9 @@ export default function takeaction() {
     email: "",
     desc: ""
   });
-
+  const [uploadImg] = useMutation<DataMutationUploadNewFile, VariablesMutationUploadNewFile>(mutationUploadFile);
+  const imgRef = useRef<File | null>(null);
+  const filePondRef = useRef<FilePond>(null);
   const handleChange = (e: any) => {
     const temp = e.target || e.originalEvent?.target;
     switch (temp.name) {
@@ -39,8 +47,20 @@ export default function takeaction() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-
+    if (!imgRef.current) {
+      alert("no img found");
+      return;
+    }
+    uploadImg({ variables: { file: imgRef.current } }).then((res) => {
+      axios
+        .post("/api/takeAction", { ...details, img: res?.data?.upload?.data?.attributes?.url ?? "" })
+        .then((res) => console.log(res));
+    });
     console.log("Form submitted:");
+    e.target.reset();
+    imgRef.current = null;
+    filePondRef.current?.removeFiles();
+    alert("Success");
   };
 
   return (
@@ -63,10 +83,34 @@ export default function takeaction() {
           Description:
           <textarea name="desc" onChange={handleChange} />
         </label>
-        <label>
-          Picture:
-          <input type="file" name="picture" onChange={handleChange} />
-        </label>
+        <FilePond
+          allowMultiple={false}
+          css={{ width: "100%", maxWidth: "550px", marginTop: "10px", boxShadow: "0 0 2rem 0 rgba(0,0,0,0.25)" }}
+          ref={filePondRef}
+          acceptedFileTypes={["image/*"]}
+          maxFiles={1}
+          required
+          onaddfile={(err, { file, fileExtension }) => {
+            if (err) {
+              console.error(err);
+            } else {
+              const fun = async () => {
+                const blob = new Blob([await file.arrayBuffer()], { type: file.type });
+                const fileNew = new File([blob], `${nanoid()}.${fileExtension}`, { type: file.type });
+                imgRef.current = fileNew;
+              };
+              fun();
+            }
+          }}
+          onremovefile={(err) => {
+            if (err) {
+              console.error(err);
+            } else {
+              imgRef.current = null;
+            }
+          }}
+          labelIdle={`Drag & Drop your Pet's image or <span class="filepond--label-action"> Browse </span>`}
+        />
         <label>
           Phone Number:
           <input type="tel" name="phonenumber" onChange={handleChange} />
