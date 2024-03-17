@@ -22,7 +22,7 @@
     },
     "pictures": {
       "type": "media",
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "allowedTypes": [
         "images"
@@ -39,6 +39,9 @@
       "relation": "manyToMany",
       "target": "api::species.species",
       "inversedBy": "products"
+    },
+    "link": {
+      "type": "string"
     }
   }
 }

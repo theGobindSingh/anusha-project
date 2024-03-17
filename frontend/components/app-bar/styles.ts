@@ -76,7 +76,7 @@ export const navCss = css`
   padding: 25px;
   gap: 20px;
   right: 50px;
-  transform: translateY(-300px);
+  transform: translateY(-150%);
   top: 0;
   text-align: center;
   border: 1px solid var(--header-col);

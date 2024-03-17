@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "petfriendlies",
+  "info": {
+    "singularName": "petfriendly",
+    "pluralName": "petfriendlies",
+    "displayName": "Petfriendly",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nameofplace": {
+      "type": "string",
+      "required": true
+    },
+    "desc": {
+      "type": "string",
+      "required": true
+    },
+    "picture": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "contactnumber": {
+      "type": "biginteger",
+      "required": true
+    },
+    "address": {
+      "type": "text",
+      "required": true
+    },
+    "openhours": {
+      "type": "string",
+      "required": false
+    }
+  }
+}

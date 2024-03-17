@@ -26,8 +26,13 @@ function ResponsiveAppBar() {
         <div className="hamburger-lines"></div>
         <nav ref={navRef} css={navCss}>
           <Link href="/">Home</Link>
-          <Link href="/">Products</Link>
-          <Link href="/">Billing</Link>
+          <Link href="/adoption">Adoption</Link>
+          <Link href="/listing">Listing</Link>
+          <Link href="/takeaction">Take Action</Link>
+          <Link href="/health">Health</Link>
+          <Link href="/wellness">Wellness</Link>
+          <Link href="/petfriendly">Pet Friendly </Link>
+          <Link href="/shop">Shop </Link>
         </nav>
       </div>
     </header>

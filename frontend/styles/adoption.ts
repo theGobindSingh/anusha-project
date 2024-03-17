@@ -57,6 +57,10 @@ export const adoptionCard = css`
   column-gap: 25px;
   align-items: center;
   overflow: hidden;
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
   @media screen and (width < 600px) {
     flex-direction: column;
     gap: 15px;
